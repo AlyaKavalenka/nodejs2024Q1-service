@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   Body,
   HttpCode,
@@ -37,10 +37,15 @@ export class ArtistController {
     return this.artistService.create(createArtistDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.artistService.findAll();
-  // }
+  @Get()
+  @ApiOperation({ summary: 'get all artists' })
+  @ApiResponse({
+    status: 200,
+    description: 'all artists records',
+  })
+  findAll() {
+    return this.artistService.findAll();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

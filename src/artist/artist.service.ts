@@ -24,9 +24,9 @@ export class ArtistService {
     return newArtist;
   }
 
-  // findAll() {
-  //   return `This action returns all artist`;
-  // }
+  findAll() {
+    return this.artists;
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} artist`;
