@@ -9,6 +9,6 @@ async function bootstrap() {
 
   await app.listen(PORT);
 
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on ${await app.getUrl()}`);
 }
 bootstrap();
