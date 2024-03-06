@@ -16,9 +16,9 @@ export class FavsService {
   //   return 'This action adds a new fav';
   // }
 
-  // findAll() {
-  //   return `This action returns all favs`;
-  // }
+  findAll() {
+    return this.favs;
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} fav`;

@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   // Post,
   // Body,
   // Patch,
@@ -8,9 +8,11 @@ import {
   // Delete,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { CreateFavDto } from './dto/create-fav.dto';
 // import { UpdateFavDto } from './dto/update-fav.dto';
 
+@ApiTags('favs')
 @Controller('favs')
 export class FavsController {
   constructor(private readonly favsService: FavsService) {}
@@ -20,10 +22,12 @@ export class FavsController {
   //   return this.favsService.create(createFavDto);
   // }
 
-  // @Get()
-  // findAll() {
-  //   return this.favsService.findAll();
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get all favorites' })
+  @ApiResponse({ status: 200, description: 'All favorites records.' })
+  findAll() {
+    return this.favsService.findAll();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
