@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateTrackDto {
   @ApiProperty()
@@ -15,5 +15,6 @@ export class CreateTrackDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsNumber()
   duration: number; // integer number
 }
