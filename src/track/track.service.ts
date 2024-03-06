@@ -47,7 +47,12 @@ export class TrackService {
     return this.tracks[foundIndex];
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} track`;
-  // }
+  remove(id: string) {
+    const foundIndex = this.tracks.findIndex((track) => track.id === id);
+
+    if (foundIndex === -1) throw new NotFoundException();
+
+    this.tracks.splice(foundIndex, 1);
+    return;
+  }
 }

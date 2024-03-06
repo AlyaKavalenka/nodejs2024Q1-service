@@ -9,7 +9,7 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
-  // Delete,
+  Delete,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -84,8 +84,22 @@ export class TrackController {
     return this.trackService.update(id, updateTrackDto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.trackService.remove(+id);
-  // }
+  @Delete(':id')
+  @HttpCode(204)
+  @ApiOperation({ summary: 'delete track' })
+  @ApiResponse({
+    status: 204,
+    description: 'if the record is found and deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === trackId doesn`t exist',
+  })
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.trackService.remove(id);
+  }
 }
