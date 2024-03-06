@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DbService } from 'src/db/db.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -34,9 +38,21 @@ export class UserService {
     return newUser;
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const { oldPassword, newPassword } = updatePasswordDto;
+
+    const foundIndex = this.db.users.findIndex((user) => user.id === id);
+    if (foundIndex !== -1) {
+      if (this.db.users[foundIndex].password === oldPassword) {
+        this.db.users[foundIndex].password = newPassword;
+        return this.db.users[foundIndex];
+      } else {
+        throw new ForbiddenException('OldPassword is wrong');
+      }
+    } else {
+      throw new NotFoundException();
+    }
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} user`;
