@@ -23,8 +23,6 @@ export class UserService {
 
     this.db.users.push(newUser);
 
-    console.log(this.db);
-
     return newUser;
   }
 
