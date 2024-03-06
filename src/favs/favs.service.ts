@@ -12,7 +12,17 @@ export class FavsService {
   // }
 
   findAll() {
-    return this.favs;
+    return this.db.favs;
+  }
+
+  addToFavTrack(id: string) {
+    const foundTrack = this.db.tracks.find((track) => track.id === id);
+
+    if (foundTrack === undefined) throw new UnprocessableEntityException();
+
+    this.db.favs.tracks.push(foundTrack.id);
+
+    return this.db.favs.tracks;
   }
 
   // findOne(id: number) {

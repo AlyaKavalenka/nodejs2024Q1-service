@@ -1,32 +1,44 @@
 import {
   Controller,
   Get,
-  // Post,
-  // Body,
-  // Patch,
-  // Param,
-  // Delete,
+  HttpCode,
+  Param,
+  ParseUUIDPipe,
+  Post,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-// import { CreateFavDto } from './dto/create-fav.dto';
-// import { UpdateFavDto } from './dto/update-fav.dto';
 
 @ApiTags('favs')
 @Controller('favs')
 export class FavsController {
   constructor(private readonly favsService: FavsService) {}
 
-  // @Post()
-  // create(@Body() createFavDto: CreateFavDto) {
-  //   return this.favsService.create(createFavDto);
-  // }
-
   @Get()
   @ApiOperation({ summary: 'Get all favorites' })
   @ApiResponse({ status: 200, description: 'All favorites records.' })
   findAll() {
     return this.favsService.findAll();
+  }
+
+  @Post('track/:id')
+  @ApiOperation({ summary: 'add track to the favorites' })
+  @ApiResponse({
+    status: 201,
+    description: 'corresponding message if track with id === trackId exists',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'corresponding message if trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 422,
+    description:
+      'corresponding message if track with id === trackId doesn`t exist',
+  })
+  @HttpCode(201)
+  create(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.favsService.addToFavTrack(id);
   }
 
   // @Get(':id')
