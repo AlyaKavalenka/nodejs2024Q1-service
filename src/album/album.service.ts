@@ -15,9 +15,11 @@ export class AlbumService {
   // create(createAlbumDto: CreateAlbumDto) {
   //   return 'This action adds a new album';
   // }
-  // findAll() {
-  //   return `This action returns all album`;
-  // }
+
+  findAll() {
+    return this.albums;
+  }
+
   // findOne(id: number) {
   //   return `This action returns a #${id} album`;
   // }

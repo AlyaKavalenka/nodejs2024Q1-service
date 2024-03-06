@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   // Post,
   // Body,
   // Patch,
@@ -8,9 +8,11 @@ import {
   // Delete,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { CreateAlbumDto } from './dto/create-album.dto';
 // import { UpdateAlbumDto } from './dto/update-album.dto';
 
+@ApiTags('album')
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
@@ -20,10 +22,12 @@ export class AlbumController {
   //   return this.albumService.create(createAlbumDto);
   // }
 
-  // @Get()
-  // findAll() {
-  //   return this.albumService.findAll();
-  // }
+  @ApiOperation({ summary: 'Get all albums' })
+  @ApiResponse({ status: 200, description: 'All albums records.' })
+  @Get()
+  findAll() {
+    return this.albumService.findAll();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
