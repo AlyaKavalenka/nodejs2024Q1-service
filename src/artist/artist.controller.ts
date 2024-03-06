@@ -9,7 +9,7 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
-  // Delete,
+  Delete,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -90,8 +90,23 @@ export class ArtistController {
     return this.artistService.update(id, updateArtistDto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.artistService.remove(+id);
-  // }
+  @Delete(':id')
+  @ApiOperation({ summary: 'delete artist' })
+  @ApiResponse({
+    status: 204,
+    description: 'if the record is found and deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'corresponding message if artistId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description:
+      'corresponding message if record with id === artistId doesn`t exist',
+  })
+  @HttpCode(204)
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.artistService.remove(id);
+  }
 }

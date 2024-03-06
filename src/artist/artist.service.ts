@@ -46,7 +46,14 @@ export class ArtistService {
     }
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} artist`;
-  // }
+  remove(id: string) {
+    const foundIndex = this.artists.findIndex((artist) => artist.id === id);
+
+    if (foundIndex === -1) {
+      throw new NotFoundException();
+    } else {
+      this.artists.splice(foundIndex, 1);
+      return;
+    }
+  }
 }
