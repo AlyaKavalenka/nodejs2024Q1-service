@@ -1,15 +1,18 @@
 import {
   Controller,
   Get,
-  // Post,
-  // Body,
+  Post,
+  Body,
+  UsePipes,
+  ValidationPipe,
+  HttpCode,
   // Patch,
   // Param,
   // Delete,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-// import { CreateAlbumDto } from './dto/create-album.dto';
+import { CreateAlbumDto } from './dto/create-album.dto';
 // import { UpdateAlbumDto } from './dto/update-album.dto';
 
 @ApiTags('album')
@@ -17,10 +20,21 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
-  // @Post()
-  // create(@Body() createAlbumDto: CreateAlbumDto) {
-  //   return this.albumService.create(createAlbumDto);
-  // }
+  @Post()
+  @ApiOperation({ summary: 'Create new album' })
+  @ApiResponse({
+    status: 201,
+    description: 'newly created record if request is valid',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if request body does not contain required fields',
+  })
+  @UsePipes(new ValidationPipe())
+  @HttpCode(201)
+  create(@Body() createAlbumDto: CreateAlbumDto) {
+    return this.albumService.create(createAlbumDto);
+  }
 
   @ApiOperation({ summary: 'Get all albums' })
   @ApiResponse({ status: 200, description: 'All albums records.' })

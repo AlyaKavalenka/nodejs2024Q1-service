@@ -5,6 +5,8 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateTrackDto } from './dto/update-track.dto';
 
+// TODO: add check if artistId exist
+// TODO: add check if albumId exist
 @Injectable()
 export class TrackService {
   tracks: Track[] = [];
