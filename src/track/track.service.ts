@@ -3,7 +3,7 @@ import { Track } from './entities/track.entity';
 import { DbService } from 'src/db/db.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
-// import { UpdateTrackDto } from './dto/update-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
 
 @Injectable()
 export class TrackService {
@@ -38,9 +38,14 @@ export class TrackService {
     return foundTrack;
   }
 
-  // update(id: number, updateTrackDto: UpdateTrackDto) {
-  //   return `This action updates a #${id} track`;
-  // }
+  update(id: string, updateTrackDto: UpdateTrackDto) {
+    const foundIndex = this.tracks.findIndex((track) => track.id === id);
+
+    if (foundIndex === -1) throw new NotFoundException();
+
+    this.tracks[foundIndex] = { ...updateTrackDto, id };
+    return this.tracks[foundIndex];
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} track`;

@@ -6,15 +6,15 @@ import {
   UsePipes,
   ValidationPipe,
   Body,
-  // Patch,
   Param,
   ParseUUIDPipe,
+  Put,
   // Delete,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateTrackDto } from './dto/create-track.dto';
-// import { UpdateTrackDto } from './dto/update-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
 
 @ApiTags('track')
 @Controller('track')
@@ -62,10 +62,27 @@ export class TrackController {
     return this.trackService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-  //   return this.trackService.update(+id, updateTrackDto);
-  // }
+  @Put(':id')
+  @ApiOperation({ summary: 'update track info' })
+  @ApiResponse({
+    status: 200,
+    description: 'updated record if request is valid',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === trackId doesn`t exist',
+  })
+  @UsePipes(new ValidationPipe())
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ) {
+    return this.trackService.update(id, updateTrackDto);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
