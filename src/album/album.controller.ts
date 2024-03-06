@@ -9,7 +9,7 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
-  // Delete,
+  Delete,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -84,8 +84,22 @@ export class AlbumController {
     return this.albumService.update(id, updateAlbumDto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.albumService.remove(+id);
-  // }
+  @Delete(':id')
+  @HttpCode(204)
+  @ApiOperation({ summary: 'delete album' })
+  @ApiResponse({
+    status: 204,
+    description: 'if the record is found and deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if albumId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === albumId doesn`t exist',
+  })
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.albumService.remove(id);
+  }
 }

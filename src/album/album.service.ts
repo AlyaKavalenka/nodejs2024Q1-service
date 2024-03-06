@@ -47,7 +47,12 @@ export class AlbumService {
     return this.albums[foundIndex];
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} album`;
-  // }
+  remove(id: string) {
+    const foundIndex = this.albums.findIndex((album) => album.id === id);
+
+    if (foundIndex === -1) throw new NotFoundException();
+
+    this.albums.splice(foundIndex, 1);
+    return;
+  }
 }
