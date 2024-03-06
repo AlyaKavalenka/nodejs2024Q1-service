@@ -54,7 +54,13 @@ export class UserService {
     }
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  remove(id: string) {
+    const foundIndex = this.db.users.findIndex((user) => user.id === id);
+    if (foundIndex !== -1) {
+      this.db.users.splice(foundIndex, 1);
+      return;
+    } else {
+      throw new NotFoundException();
+    }
+  }
 }

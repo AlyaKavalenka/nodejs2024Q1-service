@@ -9,7 +9,8 @@ import {
   ParseUUIDPipe,
   NotFoundException,
   Put,
-  // Delete,
+  Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -89,8 +90,22 @@ export class UserController {
     return this.userService.updatePassword(id, updatePasswordDto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @Delete(':id')
+  @HttpCode(204)
+  @ApiOperation({ summary: 'delete user' })
+  @ApiResponse({
+    status: 204,
+    description: 'if the record is found and deleted',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if userId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === userId doesn`t exist',
+  })
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.userService.remove(id);
+  }
 }
