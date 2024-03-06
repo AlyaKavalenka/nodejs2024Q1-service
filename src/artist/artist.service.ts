@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { DbService } from 'src/db/db.service';
-import { Artist } from 'src/types/types';
+import { Artist } from './entities/artist.entity';
 import { v4 as uuidv4 } from 'uuid';
 // import { UpdateArtistDto } from './dto/update-artist.dto';
 
