@@ -5,11 +5,6 @@ export class UpdateArtistDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  id: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
   @ApiProperty()

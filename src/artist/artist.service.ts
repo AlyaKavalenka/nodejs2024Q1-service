@@ -41,7 +41,7 @@ export class ArtistService {
     if (foundIndex === -1) {
       throw new NotFoundException();
     } else {
-      this.artists[foundIndex] = updateArtistDto;
+      this.artists[foundIndex] = { ...updateArtistDto, id };
       return this.artists[foundIndex];
     }
   }
