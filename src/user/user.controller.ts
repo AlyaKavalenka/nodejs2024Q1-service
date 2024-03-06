@@ -6,7 +6,9 @@ import {
   UsePipes,
   ValidationPipe,
   // Patch,
-  // Param,
+  Param,
+  ParseUUIDPipe,
+  NotFoundException,
   // Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -26,10 +28,25 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(+id);
-  // }
+  @Get(':id')
+  @ApiOperation({ summary: 'Get single user by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'if record with id === userId if it exists',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if userId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === userId doesn`t exist',
+  })
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    const foundUser = this.userService.findOne(id);
+    if (foundUser === undefined) throw new NotFoundException();
+    return foundUser;
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create user' })

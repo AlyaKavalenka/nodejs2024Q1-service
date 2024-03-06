@@ -12,6 +12,10 @@ export class UserService {
     return this.db.users;
   }
 
+  findOne(id: string) {
+    return this.db.users.find((user) => user.id === id);
+  }
+
   create(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
 
@@ -29,10 +33,6 @@ export class UserService {
 
     return newUser;
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
