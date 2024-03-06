@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   // Post,
   // Body,
   // Patch,
@@ -8,9 +8,11 @@ import {
   // Delete,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 // import { CreateTrackDto } from './dto/create-track.dto';
 // import { UpdateTrackDto } from './dto/update-track.dto';
 
+@ApiTags('track')
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
@@ -20,10 +22,12 @@ export class TrackController {
   //   return this.trackService.create(createTrackDto);
   // }
 
-  // @Get()
-  // findAll() {
-  //   return this.trackService.findAll();
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get all tracks' })
+  @ApiResponse({ status: 200, description: 'All tracks records.' })
+  findAll() {
+    return this.trackService.findAll();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
