@@ -3,7 +3,7 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { DbService } from 'src/db/db.service';
 import { Artist } from './entities/artist.entity';
 import { v4 as uuidv4 } from 'uuid';
-// import { UpdateArtistDto } from './dto/update-artist.dto';
+import { UpdateArtistDto } from './dto/update-artist.dto';
 
 @Injectable()
 export class ArtistService {
@@ -36,9 +36,15 @@ export class ArtistService {
     return found;
   }
 
-  // update(id: number, updateArtistDto: UpdateArtistDto) {
-  //   return `This action updates a #${id} artist`;
-  // }
+  update(id: string, updateArtistDto: UpdateArtistDto) {
+    const foundIndex = this.artists.findIndex((artist) => artist.id === id);
+    if (foundIndex === -1) {
+      throw new NotFoundException();
+    } else {
+      this.artists[foundIndex] = updateArtistDto;
+      return this.artists[foundIndex];
+    }
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} artist`;
