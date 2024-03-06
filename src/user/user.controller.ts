@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   Body,
   UsePipes,
@@ -19,12 +19,12 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Get()
-  // @ApiOperation({ summary: 'Get all users' })
-  // @ApiResponse({ status: 200, description: 'All users records.' })
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'All users records.' })
+  findAll() {
+    return this.userService.findAll();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

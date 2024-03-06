@@ -8,6 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 export class UserService {
   constructor(private db: DbService) {}
 
+  findAll() {
+    return this.db.users;
+  }
+
   create(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
 
@@ -25,10 +29,6 @@ export class UserService {
 
     return newUser;
   }
-
-  // findAll() {
-  //   return `This action returns all user`;
-  // }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} user`;
