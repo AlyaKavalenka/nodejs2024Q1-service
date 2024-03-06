@@ -8,7 +8,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DbService } from 'src/db/db.service';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './entities/user.entity';
-
+// TODO: exclude password from all response
 @Injectable()
 export class UserService {
   users: User[] = [];
