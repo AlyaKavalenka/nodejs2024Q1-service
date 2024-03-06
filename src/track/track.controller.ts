@@ -7,7 +7,8 @@ import {
   ValidationPipe,
   Body,
   // Patch,
-  // Param,
+  Param,
+  ParseUUIDPipe,
   // Delete,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
@@ -43,10 +44,23 @@ export class TrackController {
     return this.trackService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.trackService.findOne(+id);
-  // }
+  @Get(':id')
+  @ApiOperation({ summary: 'Get single track by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'if record with id === trackId if it exists',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if trackId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === trackId doesn`t exist',
+  })
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.trackService.findOne(id);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {

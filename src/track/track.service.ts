@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Track } from './entities/track.entity';
 import { DbService } from 'src/db/db.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -30,9 +30,13 @@ export class TrackService {
     return this.tracks;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} track`;
-  // }
+  findOne(id: string) {
+    const foundTrack = this.tracks.find((track) => track.id === id);
+
+    if (foundTrack === undefined) throw new NotFoundException();
+
+    return foundTrack;
+  }
 
   // update(id: number, updateTrackDto: UpdateTrackDto) {
   //   return `This action updates a #${id} track`;
