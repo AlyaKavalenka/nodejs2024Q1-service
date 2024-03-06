@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Album } from './entities/album.entity';
 import { DbService } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -16,23 +16,28 @@ export class AlbumService {
 
   create(createAlbumDto: CreateAlbumDto) {
     const { artistId } = createAlbumDto;
-    const newTrack = {
+    const newAlbum = {
       ...createAlbumDto,
       id: uuidv4(),
       artistId: artistId || null,
     };
 
-    this.albums.push(newTrack);
-    return newTrack;
+    this.albums.push(newAlbum);
+    return newAlbum;
   }
 
   findAll() {
     return this.albums;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} album`;
-  // }
+  findOne(id: string) {
+    const foundAlbum = this.albums.find((album) => album.id === id);
+
+    if (foundAlbum === undefined) throw new NotFoundException();
+
+    return foundAlbum;
+  }
+
   // update(id: number, updateAlbumDto: UpdateAlbumDto) {
   //   return `This action updates a #${id} album`;
   // }

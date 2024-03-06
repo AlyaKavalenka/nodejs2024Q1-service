@@ -7,7 +7,8 @@ import {
   ValidationPipe,
   HttpCode,
   // Patch,
-  // Param,
+  Param,
+  ParseUUIDPipe,
   // Delete,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
@@ -43,10 +44,23 @@ export class AlbumController {
     return this.albumService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.albumService.findOne(+id);
-  // }
+  @Get(':id')
+  @ApiOperation({ summary: 'Get single album by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'if record with id === albumId if it exists',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if albumId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === albumId doesn`t exist',
+  })
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.albumService.findOne(id);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
