@@ -7,7 +7,8 @@ import {
   UsePipes,
   ValidationPipe,
   // Patch,
-  // Param,
+  Param,
+  ParseUUIDPipe,
   // Delete,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
@@ -47,10 +48,24 @@ export class ArtistController {
     return this.artistService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.artistService.findOne(+id);
-  // }
+  @Get(':id')
+  @ApiOperation({ summary: 'get all artists' })
+  @ApiResponse({
+    status: 200,
+    description: 'record with id === artistId if it exists',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'corresponding message if artistId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description:
+      'corresponding message if record with id === artistId doesn`t exist',
+  })
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.artistService.findOne(id);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {

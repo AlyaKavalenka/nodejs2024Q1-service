@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { DbService } from 'src/db/db.service';
 import { Artist } from 'src/types/types';
@@ -28,9 +28,13 @@ export class ArtistService {
     return this.artists;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} artist`;
-  // }
+  findOne(id: string) {
+    const found = this.artists.find((artist) => artist.id === id);
+
+    if (found === undefined) throw new NotFoundException();
+
+    return found;
+  }
 
   // update(id: number, updateArtistDto: UpdateArtistDto) {
   //   return `This action updates a #${id} artist`;
