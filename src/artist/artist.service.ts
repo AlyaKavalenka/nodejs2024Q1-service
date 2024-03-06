@@ -1,12 +1,28 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateArtistDto } from './dto/create-artist.dto';
+import { CreateArtistDto } from './dto/create-artist.dto';
+import { DbService } from 'src/db/db.service';
+import { Artist } from 'src/types/types';
+import { v4 as uuidv4 } from 'uuid';
 // import { UpdateArtistDto } from './dto/update-artist.dto';
 
 @Injectable()
 export class ArtistService {
-  // create(createArtistDto: CreateArtistDto) {
-  //   return 'This action adds a new artist';
-  // }
+  artists: Artist[];
+
+  constructor(private db: DbService) {
+    this.artists = this.db.artists;
+  }
+
+  create(createArtistDto: CreateArtistDto) {
+    const newArtist = {
+      id: uuidv4(),
+      ...createArtistDto,
+    };
+
+    this.artists.push(newArtist);
+
+    return newArtist;
+  }
 
   // findAll() {
   //   return `This action returns all artist`;

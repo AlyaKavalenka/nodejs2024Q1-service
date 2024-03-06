@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/types/types';
+import { Artist, User } from 'src/types/types';
 
 @Injectable()
 export class DbService {
   users: User[] = [];
+  artists: Artist[] = [];
 }

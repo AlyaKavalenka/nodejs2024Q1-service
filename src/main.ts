@@ -10,7 +10,6 @@ async function bootstrap() {
     .setTitle('NODEJS2024Q1-service')
     .setDescription('The service API description')
     .setVersion('1.0')
-    .addTag('user')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
