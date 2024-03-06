@@ -1,15 +1,18 @@
 import {
   Controller,
   Get,
-  // Post,
-  // Body,
+  HttpCode,
+  Post,
+  UsePipes,
+  ValidationPipe,
+  Body,
   // Patch,
   // Param,
   // Delete,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-// import { CreateTrackDto } from './dto/create-track.dto';
+import { CreateTrackDto } from './dto/create-track.dto';
 // import { UpdateTrackDto } from './dto/update-track.dto';
 
 @ApiTags('track')
@@ -17,10 +20,21 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
-  // @Post()
-  // create(@Body() createTrackDto: CreateTrackDto) {
-  //   return this.trackService.create(createTrackDto);
-  // }
+  @Post()
+  @ApiOperation({ summary: 'Create new track' })
+  @ApiResponse({
+    status: 201,
+    description: 'newly created record if request is valid',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if request body does not contain required fields',
+  })
+  @UsePipes(new ValidationPipe())
+  @HttpCode(201)
+  create(@Body() createTrackDto: CreateTrackDto) {
+    return this.trackService.create(createTrackDto);
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all tracks' })

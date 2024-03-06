@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Track } from './entities/track.entity';
 import { DbService } from 'src/db/db.service';
-// import { CreateTrackDto } from './dto/create-track.dto';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { v4 as uuidv4 } from 'uuid';
 // import { UpdateTrackDto } from './dto/update-track.dto';
 
 @Injectable()
@@ -12,9 +13,18 @@ export class TrackService {
     this.db.tracks = this.tracks;
   }
 
-  // create(createTrackDto: CreateTrackDto) {
-  //   return 'This action adds a new track';
-  // }
+  create(createTrackDto: CreateTrackDto) {
+    const { artistId, albumId } = createTrackDto;
+    const newTrack = {
+      ...createTrackDto,
+      id: uuidv4(),
+      artistId: artistId || null,
+      albumId: albumId || null,
+    };
+
+    this.tracks.push(newTrack);
+    return newTrack;
+  }
 
   findAll() {
     return this.tracks;
