@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 // import { CreateFavDto } from './dto/create-fav.dto';
 // import { UpdateFavDto } from './dto/update-fav.dto';
@@ -36,4 +40,15 @@ export class FavsService {
   // remove(id: number) {
   //   return `This action removes a #${id} fav`;
   // }
+
+  removeTrackFromFav(id: string) {
+    const foundInFavsTackIndex = this.db.favs.tracks.findIndex(
+      (trackId) => trackId === id,
+    );
+
+    if (foundInFavsTackIndex === -1) throw new NotFoundException();
+
+    this.db.favs.tracks.splice(foundInFavsTackIndex, 1);
+    return;
+  }
 }
