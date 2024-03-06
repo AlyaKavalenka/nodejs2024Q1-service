@@ -3,7 +3,9 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { Album } from 'src/album/entities/album.entity';
 import { DbService } from 'src/db/db.service';
+import { Track } from 'src/track/entities/track.entity';
 // import { CreateFavDto } from './dto/create-fav.dto';
 // import { UpdateFavDto } from './dto/update-fav.dto';
 
@@ -19,14 +21,33 @@ export class FavsService {
     return this.db.favs;
   }
 
-  addToFavTrack(id: string) {
-    const foundTrack = this.db.tracks.find((track) => track.id === id);
+  addToFav(type: string, id: string) {
+    let currentDbItem: Album[] | Track[];
+    let currentDbFavItem: string[];
 
-    if (foundTrack === undefined) throw new UnprocessableEntityException();
+    switch (type) {
+      case 'track':
+        currentDbItem = this.db.tracks;
+        currentDbFavItem = this.db.favs.tracks;
+        break;
 
-    this.db.favs.tracks.push(foundTrack.id);
+      case 'album':
+        currentDbItem = this.db.albums;
+        currentDbFavItem = this.db.favs.albums;
+        break;
 
-    return this.db.favs.tracks;
+      default:
+        break;
+    }
+
+    const foundItem = currentDbItem.find((item) => item.id === id);
+
+    if (foundItem === undefined)
+      throw new UnprocessableEntityException(`No ${type} found with id: ${id}`);
+
+    currentDbFavItem.push(foundItem.id);
+
+    return currentDbFavItem;
   }
 
   // findOne(id: number) {

@@ -22,24 +22,26 @@ export class FavsController {
     return this.favsService.findAll();
   }
 
-  @Post('track/:id')
-  @ApiOperation({ summary: 'add track to the favorites' })
+  @Post(':type/:id')
+  @ApiOperation({ summary: 'Add item to the favorites' })
   @ApiResponse({
     status: 201,
-    description: 'corresponding message if track with id === trackId exists',
+    description: 'Corresponding message if item with id exists',
   })
   @ApiResponse({
     status: 400,
-    description: 'corresponding message if trackId is invalid (not uuid)',
+    description: 'Corresponding message if id is invalid (not uuid)',
   })
   @ApiResponse({
     status: 422,
-    description:
-      'corresponding message if track with id === trackId doesn`t exist',
+    description: 'Corresponding message if item with id doesn`t exist',
   })
   @HttpCode(201)
-  create(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.addToFavTrack(id);
+  addToFavorites(
+    @Param('type') type: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ) {
+    return this.favsService.addToFav(type, id);
   }
 
   // @Get(':id')
