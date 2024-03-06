@@ -5,24 +5,20 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { DbService } from 'src/db/db.service';
+import { DbService } from '../db/db.service';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from './entities/user.entity';
+
 // TODO: exclude password from all response
 @Injectable()
 export class UserService {
-  users: User[] = [];
-
-  constructor(private db: DbService) {
-    this.db.users = this.users;
-  }
+  constructor(private db: DbService) {}
 
   findAll() {
-    return this.users;
+    return this.db.users;
   }
 
   findOne(id: string) {
-    return this.users.find((user) => user.id === id);
+    return this.db.users.find((user) => user.id === id);
   }
 
   create(createUserDto: CreateUserDto) {
@@ -38,7 +34,7 @@ export class UserService {
       updatedAt: currDate,
     };
 
-    this.users.push(newUser);
+    this.db.users.push(newUser);
 
     return newUser;
   }
@@ -46,16 +42,16 @@ export class UserService {
   updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
     const { oldPassword, newPassword } = updatePasswordDto;
 
-    const foundIndex = this.users.findIndex((user) => user.id === id);
+    const foundIndex = this.db.users.findIndex((user) => user.id === id);
     if (foundIndex !== -1) {
-      if (this.users[foundIndex].password === oldPassword) {
-        this.users[foundIndex] = {
-          ...this.users[foundIndex],
+      if (this.db.users[foundIndex].password === oldPassword) {
+        this.db.users[foundIndex] = {
+          ...this.db.users[foundIndex],
           password: newPassword,
           updatedAt: Date.now(),
-          version: this.users[foundIndex].version + 1,
+          version: this.db.users[foundIndex].version + 1,
         };
-        return this.users[foundIndex];
+        return this.db.users[foundIndex];
       } else {
         throw new ForbiddenException('OldPassword is wrong');
       }
@@ -65,9 +61,9 @@ export class UserService {
   }
 
   remove(id: string) {
-    const foundIndex = this.users.findIndex((user) => user.id === id);
+    const foundIndex = this.db.users.findIndex((user) => user.id === id);
     if (foundIndex !== -1) {
-      this.users.splice(foundIndex, 1);
+      this.db.users.splice(foundIndex, 1);
       return;
     } else {
       throw new NotFoundException();

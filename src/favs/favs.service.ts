@@ -1,16 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { Fav } from './entities/fav.entity';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 // import { CreateFavDto } from './dto/create-fav.dto';
 // import { UpdateFavDto } from './dto/update-fav.dto';
 
 @Injectable()
 export class FavsService {
-  favs: Fav[] = [];
-
-  constructor(private db: DbService) {
-    this.db.favs = this.favs;
-  }
+  constructor(private db: DbService) {}
 
   // create(createFavDto: CreateFavDto) {
   //   return 'This action adds a new fav';

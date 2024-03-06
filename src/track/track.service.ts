@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Track } from './entities/track.entity';
 import { DbService } from 'src/db/db.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,11 +8,7 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 // TODO: add check if albumId exist
 @Injectable()
 export class TrackService {
-  tracks: Track[] = [];
-
-  constructor(private db: DbService) {
-    this.db.tracks = this.tracks;
-  }
+  constructor(private db: DbService) {}
 
   create(createTrackDto: CreateTrackDto) {
     const { artistId, albumId } = createTrackDto;
@@ -24,16 +19,16 @@ export class TrackService {
       albumId: albumId || null,
     };
 
-    this.tracks.push(newTrack);
+    this.db.tracks.push(newTrack);
     return newTrack;
   }
 
   findAll() {
-    return this.tracks;
+    return this.db.tracks;
   }
 
   findOne(id: string) {
-    const foundTrack = this.tracks.find((track) => track.id === id);
+    const foundTrack = this.db.tracks.find((track) => track.id === id);
 
     if (foundTrack === undefined) throw new NotFoundException();
 
@@ -41,20 +36,20 @@ export class TrackService {
   }
 
   update(id: string, updateTrackDto: UpdateTrackDto) {
-    const foundIndex = this.tracks.findIndex((track) => track.id === id);
+    const foundIndex = this.db.tracks.findIndex((track) => track.id === id);
 
     if (foundIndex === -1) throw new NotFoundException();
 
-    this.tracks[foundIndex] = { ...updateTrackDto, id };
-    return this.tracks[foundIndex];
+    this.db.tracks[foundIndex] = { ...updateTrackDto, id };
+    return this.db.tracks[foundIndex];
   }
 
   remove(id: string) {
-    const foundIndex = this.tracks.findIndex((track) => track.id === id);
+    const foundIndex = this.db.tracks.findIndex((track) => track.id === id);
 
     if (foundIndex === -1) throw new NotFoundException();
 
-    this.tracks.splice(foundIndex, 1);
+    this.db.tracks.splice(foundIndex, 1);
     return;
   }
 }

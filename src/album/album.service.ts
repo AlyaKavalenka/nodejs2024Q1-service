@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Album } from './entities/album.entity';
 import { DbService } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,11 +7,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 // TODO: add check if artistId exist
 @Injectable()
 export class AlbumService {
-  albums: Album[] = [];
-
-  constructor(private db: DbService) {
-    this.db.albums = this.albums;
-  }
+  constructor(private db: DbService) {}
 
   create(createAlbumDto: CreateAlbumDto) {
     const { artistId } = createAlbumDto;
@@ -22,16 +17,16 @@ export class AlbumService {
       artistId: artistId || null,
     };
 
-    this.albums.push(newAlbum);
+    this.db.albums.push(newAlbum);
     return newAlbum;
   }
 
   findAll() {
-    return this.albums;
+    return this.db.albums;
   }
 
   findOne(id: string) {
-    const foundAlbum = this.albums.find((album) => album.id === id);
+    const foundAlbum = this.db.albums.find((album) => album.id === id);
 
     if (foundAlbum === undefined) throw new NotFoundException();
 
@@ -39,20 +34,20 @@ export class AlbumService {
   }
 
   update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const foundIndex = this.albums.findIndex((album) => album.id === id);
+    const foundIndex = this.db.albums.findIndex((album) => album.id === id);
 
     if (foundIndex === -1) throw new NotFoundException();
 
-    this.albums[foundIndex] = { ...updateAlbumDto, id };
-    return this.albums[foundIndex];
+    this.db.albums[foundIndex] = { ...updateAlbumDto, id };
+    return this.db.albums[foundIndex];
   }
 
   remove(id: string) {
-    const foundIndex = this.albums.findIndex((album) => album.id === id);
+    const foundIndex = this.db.albums.findIndex((album) => album.id === id);
 
     if (foundIndex === -1) throw new NotFoundException();
 
-    this.albums.splice(foundIndex, 1);
+    this.db.albums.splice(foundIndex, 1);
     return;
   }
 }
