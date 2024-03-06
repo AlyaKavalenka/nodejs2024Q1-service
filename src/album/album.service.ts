@@ -3,7 +3,7 @@ import { Album } from './entities/album.entity';
 import { DbService } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { v4 as uuidv4 } from 'uuid';
-// import { UpdateAlbumDto } from './dto/update-album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
 
 // TODO: add check if artistId exist
 @Injectable()
@@ -38,9 +38,15 @@ export class AlbumService {
     return foundAlbum;
   }
 
-  // update(id: number, updateAlbumDto: UpdateAlbumDto) {
-  //   return `This action updates a #${id} album`;
-  // }
+  update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const foundIndex = this.albums.findIndex((album) => album.id === id);
+
+    if (foundIndex === -1) throw new NotFoundException();
+
+    this.albums[foundIndex] = { ...updateAlbumDto, id };
+    return this.albums[foundIndex];
+  }
+
   // remove(id: number) {
   //   return `This action removes a #${id} album`;
   // }

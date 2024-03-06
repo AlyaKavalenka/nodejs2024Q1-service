@@ -6,15 +6,15 @@ import {
   UsePipes,
   ValidationPipe,
   HttpCode,
-  // Patch,
   Param,
   ParseUUIDPipe,
+  Put,
   // Delete,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateAlbumDto } from './dto/create-album.dto';
-// import { UpdateAlbumDto } from './dto/update-album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
 
 @ApiTags('album')
 @Controller('album')
@@ -62,10 +62,27 @@ export class AlbumController {
     return this.albumService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
-  //   return this.albumService.update(+id, updateAlbumDto);
-  // }
+  @Put(':id')
+  @ApiOperation({ summary: 'update album info' })
+  @ApiResponse({
+    status: 200,
+    description: 'updated record if request is valid',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'if albumId is invalid (not uuid)',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'if record with id === albumId doesn`t exist',
+  })
+  @UsePipes(new ValidationPipe())
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() updateAlbumDto: UpdateAlbumDto,
+  ) {
+    return this.albumService.update(id, updateAlbumDto);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
