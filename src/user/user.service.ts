@@ -60,7 +60,7 @@ export class UserService {
           updatedAt: Date.now(),
           version: this.db.users[foundIndex].version + 1,
         };
-        return 'password changed';
+        return this.excludePasswordFromResponse(this.db.users[foundIndex]);
       } else {
         throw new ForbiddenException('OldPassword is wrong');
       }
