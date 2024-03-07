@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ValidationTypes } from 'class-validator';
 
 @ApiTags('favs')
 @Controller('favs')
@@ -38,7 +39,7 @@ export class FavsController {
   })
   @HttpCode(201)
   addToFavorites(
-    @Param('type') type: string,
+    @Param('type') type: 'album' | 'track',
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     return this.favsService.addToFav(type, id);
@@ -71,7 +72,7 @@ export class FavsController {
     description: 'Corresponding message if corresponding item is not favorite',
   })
   removeItemFromFav(
-    @Param('type') type: string,
+    @Param('type') type: 'album' | 'track',
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     return this.favsService.removeItemFromFav(type, id);
