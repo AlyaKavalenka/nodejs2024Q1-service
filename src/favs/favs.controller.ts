@@ -54,23 +54,26 @@ export class FavsController {
   //   return this.favsService.update(+id, updateFavDto);
   // }
 
-  @Delete('track/:id')
+  @Delete(':type/:id')
   @HttpCode(204)
-  @ApiOperation({ summary: 'delete track from favorites ' })
+  @ApiOperation({ summary: 'Delete item from favorites ' })
   @ApiResponse({
     status: 204,
     description:
-      'f the track was in favorites and now it`s deleted id is found and deleted',
+      'If the item was in favorites and now it`s deleted id is found and deleted',
   })
   @ApiResponse({
     status: 400,
-    description: 'corresponding message if trackId is invalid (not uuid)',
+    description: 'Corresponding message if itemId is invalid (not uuid)',
   })
   @ApiResponse({
     status: 404,
-    description: 'corresponding message if corresponding track is not favorite',
+    description: 'Corresponding message if corresponding item is not favorite',
   })
-  remove(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.removeTrackFromFav(id);
+  removeItemFromFav(
+    @Param('type') type: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ) {
+    return this.favsService.removeItemFromFav(type, id);
   }
 }

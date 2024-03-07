@@ -3,9 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { Album } from 'src/album/entities/album.entity';
 import { DbService } from 'src/db/db.service';
-import { Track } from 'src/track/entities/track.entity';
 // import { CreateFavDto } from './dto/create-fav.dto';
 // import { UpdateFavDto } from './dto/update-fav.dto';
 
@@ -22,32 +20,18 @@ export class FavsService {
   }
 
   addToFav(type: string, id: string) {
-    let currentDbItem: Album[] | Track[];
-    let currentDbFavItem: string[];
+    const typeS = type + 's';
 
-    switch (type) {
-      case 'track':
-        currentDbItem = this.db.tracks;
-        currentDbFavItem = this.db.favs.tracks;
-        break;
-
-      case 'album':
-        currentDbItem = this.db.albums;
-        currentDbFavItem = this.db.favs.albums;
-        break;
-
-      default:
-        break;
-    }
-
-    const foundItem = currentDbItem.find((item) => item.id === id);
+    const foundItem = this.db[typeS].find(
+      (item: { id: string }) => item.id === id,
+    );
 
     if (foundItem === undefined)
       throw new UnprocessableEntityException(`No ${type} found with id: ${id}`);
 
-    currentDbFavItem.push(foundItem.id);
+    this.db.favs[typeS].push(foundItem.id);
 
-    return currentDbFavItem;
+    return this.db.favs[typeS];
   }
 
   // findOne(id: number) {
@@ -62,14 +46,19 @@ export class FavsService {
   //   return `This action removes a #${id} fav`;
   // }
 
-  removeTrackFromFav(id: string) {
-    const foundInFavsTackIndex = this.db.favs.tracks.findIndex(
-      (trackId) => trackId === id,
+  removeItemFromFav(type: string, id: string) {
+    const typeS = type + 's';
+
+    const index = this.db.favs[typeS].findIndex(
+      (itemId: string) => itemId === id,
     );
 
-    if (foundInFavsTackIndex === -1) throw new NotFoundException();
+    if (index === -1) {
+      throw new NotFoundException(
+        `No ${type} found in favorites with id: ${id}`,
+      );
+    }
 
-    this.db.favs.tracks.splice(foundInFavsTackIndex, 1);
-    return;
+    this.db.favs[typeS].splice(index, 1);
   }
 }
