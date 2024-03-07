@@ -4,7 +4,6 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 
-// TODO: add check if artistId exist
 @Injectable()
 export class AlbumService {
   constructor(private db: DbService) {}
