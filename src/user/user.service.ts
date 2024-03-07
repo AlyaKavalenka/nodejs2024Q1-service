@@ -7,18 +7,26 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { DbService } from '../db/db.service';
 import { v4 as uuidv4 } from 'uuid';
+import { User } from './entities/user.entity';
 
-// TODO: exclude password from all response
 @Injectable()
 export class UserService {
   constructor(private db: DbService) {}
 
+  excludePasswordFromResponse(obj: User) {
+    const copyObj = { ...obj };
+    delete copyObj.password;
+    return copyObj;
+  }
+
   findAll() {
-    return this.db.users;
+    return this.db.users.map((user) => this.excludePasswordFromResponse(user));
   }
 
   findOne(id: string) {
-    return this.db.users.find((user) => user.id === id);
+    return this.excludePasswordFromResponse(
+      this.db.users.find((user) => user.id === id),
+    );
   }
 
   create(createUserDto: CreateUserDto) {
@@ -36,7 +44,7 @@ export class UserService {
 
     this.db.users.push(newUser);
 
-    return newUser;
+    return this.excludePasswordFromResponse(newUser);
   }
 
   updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
@@ -51,7 +59,7 @@ export class UserService {
           updatedAt: Date.now(),
           version: this.db.users[foundIndex].version + 1,
         };
-        return this.db.users[foundIndex];
+        return 'password changed';
       } else {
         throw new ForbiddenException('OldPassword is wrong');
       }
