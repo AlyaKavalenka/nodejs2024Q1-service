@@ -48,6 +48,24 @@ export class ArtistService {
       throw new NotFoundException();
     } else {
       this.db.artists.splice(foundIndex, 1);
+
+      const foundInTracksIndex = this.db.tracks.findIndex(
+        (track) => track.artistId === id,
+      );
+      if (foundInTracksIndex !== -1)
+        this.db.tracks[foundInTracksIndex].artistId = null;
+
+      const foundInAlbumsIndex = this.db.albums.findIndex(
+        (album) => album.artistId === id,
+      );
+      if (foundInAlbumsIndex !== -1)
+        this.db.albums[foundInAlbumsIndex].artistId = null;
+
+      const foundInFavsIndex = this.db.favs.artists.findIndex(
+        (artistId) => artistId === id,
+      );
+      if (foundInFavsIndex !== -1) this.db.artists.splice(foundInFavsIndex, 1);
+
       return;
     }
   }
