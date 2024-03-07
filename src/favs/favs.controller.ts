@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ValidationTypes } from 'class-validator';
 
 @ApiTags('favs')
 @Controller('favs')
@@ -24,7 +23,10 @@ export class FavsController {
   }
 
   @Post(':type/:id')
-  @ApiOperation({ summary: 'Add item to the favorites' })
+  @ApiOperation({
+    summary: 'Add item to the favorites',
+    description: `type: album || track || artist`,
+  })
   @ApiResponse({
     status: 201,
     description: 'Corresponding message if item with id exists',
@@ -39,25 +41,18 @@ export class FavsController {
   })
   @HttpCode(201)
   addToFavorites(
-    @Param('type') type: 'album' | 'track',
+    @Param('type') type: 'album' | 'track' | 'artist',
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     return this.favsService.addToFav(type, id);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.favsService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateFavDto: UpdateFavDto) {
-  //   return this.favsService.update(+id, updateFavDto);
-  // }
-
   @Delete(':type/:id')
   @HttpCode(204)
-  @ApiOperation({ summary: 'Delete item from favorites ' })
+  @ApiOperation({
+    summary: 'Delete item from favorites ',
+    description: `type: album || track || artist`,
+  })
   @ApiResponse({
     status: 204,
     description:
@@ -72,7 +67,7 @@ export class FavsController {
     description: 'Corresponding message if corresponding item is not favorite',
   })
   removeItemFromFav(
-    @Param('type') type: 'album' | 'track',
+    @Param('type') type: 'album' | 'track' | 'artist',
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     return this.favsService.removeItemFromFav(type, id);
