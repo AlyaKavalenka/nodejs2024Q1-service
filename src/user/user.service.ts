@@ -24,9 +24,10 @@ export class UserService {
   }
 
   findOne(id: string) {
-    return this.excludePasswordFromResponse(
-      this.db.users.find((user) => user.id === id),
-    );
+    const foundUser = this.db.users.find((user) => user.id === id);
+    if (foundUser === undefined) throw new NotFoundException();
+
+    return this.excludePasswordFromResponse(foundUser);
   }
 
   create(createUserDto: CreateUserDto) {

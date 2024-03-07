@@ -7,7 +7,6 @@ import {
   ValidationPipe,
   Param,
   ParseUUIDPipe,
-  NotFoundException,
   Put,
   Delete,
   HttpCode,
@@ -44,9 +43,7 @@ export class UserController {
     description: 'if record with id === userId doesn`t exist',
   })
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    const foundUser = this.userService.findOne(id);
-    if (foundUser === undefined) throw new NotFoundException();
-    return foundUser;
+    this.userService.findOne(id);
   }
 
   @Post()
