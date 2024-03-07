@@ -47,6 +47,18 @@ export class AlbumService {
 
     if (foundIndex === -1) throw new NotFoundException();
 
+    const foundInTracksIndex = this.db.tracks.findIndex(
+      (track) => track.albumId === id,
+    );
+    if (foundInTracksIndex !== -1)
+      this.db.tracks[foundInTracksIndex].albumId = null;
+
+    const foundInFavsIndex = this.db.favs.albums.findIndex(
+      (albumId) => albumId === id,
+    );
+    if (foundInFavsIndex !== -1)
+      this.db.favs.albums.splice(foundInFavsIndex, 1);
+
     this.db.albums.splice(foundIndex, 1);
     return;
   }
