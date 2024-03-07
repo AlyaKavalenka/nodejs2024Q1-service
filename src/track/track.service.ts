@@ -49,6 +49,12 @@ export class TrackService {
 
     if (foundIndex === -1) throw new NotFoundException();
 
+    const foundInFavsIndex = this.db.favs.tracks.findIndex(
+      (trackId) => trackId === id,
+    );
+    if (foundInFavsIndex !== -1)
+      this.db.favs.tracks.splice(foundInFavsIndex, 1);
+
     this.db.tracks.splice(foundIndex, 1);
     return;
   }
