@@ -43,7 +43,7 @@ export class UserController {
     description: 'if record with id === userId doesn`t exist',
   })
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    this.userService.findOne(id);
+    return this.userService.findOne(id);
   }
 
   @Post()

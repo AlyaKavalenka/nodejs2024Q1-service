@@ -5,62 +5,60 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { DbService } from '../db/db.service';
-import { v4 as uuidv4 } from 'uuid';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private db: DbService) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
-  excludePasswordFromResponse(obj: User) {
+  private excludePasswordFromResponse(obj: User) {
     const copyObj = { ...obj };
     delete copyObj.password;
     return copyObj;
   }
 
-  findAll() {
-    return this.db.users.map((user) => this.excludePasswordFromResponse(user));
+  async findAll() {
+    return (await this.usersRepository.find()).map((user) =>
+      this.excludePasswordFromResponse(user),
+    );
   }
 
-  findOne(id: string) {
-    const foundUser = this.db.users.find((user) => user.id === id);
-    if (foundUser === undefined) throw new NotFoundException();
-
-    return this.excludePasswordFromResponse(foundUser);
+  async findOne(id: string) {
+    const fromDB = await this.usersRepository.findOneBy({ id });
+    if (!fromDB) throw new NotFoundException();
+    return this.excludePasswordFromResponse(fromDB);
   }
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
 
-    const currDate = Date.now();
-    const newUser = {
-      id: uuidv4(),
-      login,
-      password,
-      version: 1,
-      createdAt: currDate,
-      updatedAt: currDate,
-    };
+    const currDate = new Date(Date.now());
+    const newUser = new User();
+    newUser.login = login;
+    newUser.password = password;
+    newUser.version = 1;
+    newUser.createdAt = currDate;
+    newUser.updatedAt = currDate;
 
-    this.db.users.push(newUser);
-
+    await this.usersRepository.save(newUser);
     return this.excludePasswordFromResponse(newUser);
   }
 
-  updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
     const { oldPassword, newPassword } = updatePasswordDto;
 
-    const foundIndex = this.db.users.findIndex((user) => user.id === id);
-    if (foundIndex !== -1) {
-      if (this.db.users[foundIndex].password === oldPassword) {
-        this.db.users[foundIndex] = {
-          ...this.db.users[foundIndex],
-          password: newPassword,
-          updatedAt: Date.now(),
-          version: this.db.users[foundIndex].version + 1,
-        };
-        return this.excludePasswordFromResponse(this.db.users[foundIndex]);
+    const foundUserById = await this.usersRepository.findOneBy({ id });
+    if (!!foundUserById) {
+      if (foundUserById.password === oldPassword) {
+        foundUserById.password = newPassword;
+        foundUserById.updatedAt = new Date();
+        await this.usersRepository.save(foundUserById);
+        return this.excludePasswordFromResponse(foundUserById);
       } else {
         throw new ForbiddenException('OldPassword is wrong');
       }
@@ -69,10 +67,10 @@ export class UserService {
     }
   }
 
-  remove(id: string) {
-    const foundIndex = this.db.users.findIndex((user) => user.id === id);
-    if (foundIndex !== -1) {
-      this.db.users.splice(foundIndex, 1);
+  async remove(id: string) {
+    const foundUserById = await this.usersRepository.findOneBy({ id });
+    if (!!foundUserById) {
+      await this.usersRepository.remove(foundUserById);
       return;
     } else {
       throw new NotFoundException();
