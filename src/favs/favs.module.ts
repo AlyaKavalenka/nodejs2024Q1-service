@@ -5,9 +5,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Track } from 'src/track/entities/track.entity';
 import { Album } from 'src/album/entities/album.entity';
 import { Artist } from 'src/artist/entities/artist.entity';
+import { FavAlbum, FavArtist, FavTrack } from './entities/fav.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Track, Album, Artist])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Track,
+      Album,
+      Artist,
+      FavAlbum,
+      FavTrack,
+      FavArtist,
+    ]),
+  ],
   controllers: [FavsController],
   providers: [FavsService],
 })
