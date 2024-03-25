@@ -9,7 +9,7 @@ services:
     environment:
       - PORT=${PORT}
       - DOCKER_HOST=${POSTGRES_HOSTNAME}
-    image: alyakavalanka/nestapp:latest
+    image: alyakolen/nestapp:latest
     ports:
       - '${PORT}:${PORT}'
     depends_on:
