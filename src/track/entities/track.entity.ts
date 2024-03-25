@@ -25,8 +25,8 @@ export class Track {
     nullable: true,
     orphanedRowAction: 'nullify',
   })
-  @JoinColumn()
-  artist: Artist;
+  @JoinColumn({ name: 'artistId', referencedColumnName: 'id' })
+  artistId: string;
 
   @ManyToOne(() => Album, {
     eager: true,
@@ -34,6 +34,6 @@ export class Track {
     nullable: true,
     orphanedRowAction: 'nullify',
   })
-  @JoinColumn()
-  album: Album;
+  @JoinColumn({ name: 'albumId', referencedColumnName: 'id' })
+  albumId: string;
 }

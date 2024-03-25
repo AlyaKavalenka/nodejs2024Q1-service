@@ -22,20 +22,20 @@ export class TrackService {
     const { artistId, albumId, duration, name } = createTrackDto;
 
     const foundArtistById = artistId
-      ? await this.artistsRepository.findOneBy({ id: artistId })
+      ? (await this.artistsRepository.findOneBy({ id: artistId })).id
       : null;
 
     const foundAlbumById = albumId
-      ? await this.albumsRepository.findOneBy({ id: albumId })
+      ? (await this.albumsRepository.findOneBy({ id: albumId })).id
       : null;
 
     const newTrack = new Track();
     newTrack.name = name;
     newTrack.duration = duration;
-    newTrack.artist = foundArtistById;
-    newTrack.album = foundAlbumById;
+    newTrack.artistId = foundArtistById;
+    newTrack.albumId = foundAlbumById;
 
-    this.tracksRepository.save(newTrack);
+    await this.tracksRepository.save(newTrack);
     return newTrack;
   }
 
@@ -58,13 +58,17 @@ export class TrackService {
     foundTrackById.name = name || foundTrackById.name;
     foundTrackById.duration = duration || foundTrackById.duration;
     if (artistId)
-      foundTrackById.artist = await this.artistsRepository.findOneBy({
-        id: artistId,
-      });
+      foundTrackById.artistId = (
+        await this.artistsRepository.findOneBy({
+          id: artistId,
+        })
+      ).id;
     if (albumId)
-      foundTrackById.album = await this.albumsRepository.findOneBy({
-        id: albumId,
-      });
+      foundTrackById.albumId = (
+        await this.albumsRepository.findOneBy({
+          id: albumId,
+        })
+      ).id;
 
     await this.tracksRepository.save(foundTrackById);
 
