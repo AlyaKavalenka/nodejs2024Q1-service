@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Album } from './entities/album.entity';
 import { Repository } from 'typeorm';
 import { Artist } from 'src/artist/entities/artist.entity';
+import { AlbumDto } from './dto/album.dto';
 
 @Injectable()
 export class AlbumService {
@@ -57,7 +58,7 @@ export class AlbumService {
     if (foundArtistById) foundAlbumById.artistId = foundArtistById;
 
     await this.albumsRepository.save(foundAlbumById);
-    return foundAlbumById;
+    return AlbumDto.convert(foundAlbumById);
   }
 
   async remove(id: string) {
