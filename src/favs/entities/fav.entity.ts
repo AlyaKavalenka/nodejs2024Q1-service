@@ -8,7 +8,7 @@ export class FavArtist {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToOne(() => Artist)
+  @OneToOne(() => Artist, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn()
   artist: Artist;
 }
@@ -18,7 +18,7 @@ export class FavAlbum {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToOne(() => Album)
+  @OneToOne(() => Album, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn()
   album: Album;
 }
@@ -28,7 +28,7 @@ export class FavTrack {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @OneToOne(() => Track)
+  @OneToOne(() => Track, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn()
   track: Track;
 }

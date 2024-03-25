@@ -19,7 +19,7 @@ export class AlbumService {
     const { name, artistId, year } = createAlbumDto;
 
     const foundArtistById = artistId
-      ? (await this.artistsRepository.findOneBy({ id: artistId })).id
+      ? await this.artistsRepository.findOneBy({ id: artistId })
       : null;
 
     const newAlbum = new Album();
@@ -49,7 +49,7 @@ export class AlbumService {
     const foundAlbumById = await this.findOne(id);
 
     const foundArtistById = artistId
-      ? (await this.artistsRepository.findOneBy({ id: artistId })).id
+      ? await this.artistsRepository.findOneBy({ id: artistId })
       : null;
 
     foundAlbumById.name = name;

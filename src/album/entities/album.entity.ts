@@ -24,6 +24,9 @@ export class Album {
     nullable: true,
     orphanedRowAction: 'nullify',
   })
-  @JoinColumn({ name: 'artistId', referencedColumnName: 'id' })
-  artistId: string;
+  @JoinColumn({
+    name: 'artistId',
+    referencedColumnName: 'id',
+  })
+  artistId: Artist;
 }
