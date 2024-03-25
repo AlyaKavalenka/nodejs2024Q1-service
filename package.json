@@ -23,7 +23,9 @@
     "docker:up": "docker-compose up --build",
     "docker:watch": "docker-compose watch",
     "migration:generate": "typeorm migration:generate -d dist/typeorm-ds.js src/migration/initial",
-    "migration:run": "typeorm migration:run -d dist/typeorm-ds.js"
+    "migration:run": "typeorm migration:run -d dist/typeorm-ds.js",
+    "scan-docker": "docker run --rm -v //var/run/docker.sock:/var/run/docker.sock aquasec/trivy --scanners vuln image",
+    "scan-app-and-db": "npm run scan-docker alyakavalanka/nestapp:latest && npm run scan-docker postgres"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.3",
