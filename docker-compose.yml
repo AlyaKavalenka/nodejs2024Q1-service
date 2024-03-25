@@ -14,10 +14,17 @@ services:
       - '${PORT}:${PORT}'
     depends_on:
       - nestappDB
-    volumes:
-      - ./src:/app/src
     networks:
       - app-network
+    develop:
+      watch:
+        - action: sync
+          path: src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json    
   nestappDB:
     image: postgres
     restart: always

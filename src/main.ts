@@ -17,7 +17,12 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const PORT = +configService.get('PORT') || 4000;
 
-  await app.listen(PORT);
+  try {
+    await app.listen(PORT);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
 
   console.log(`Server started on ${await app.getUrl()}`);
 }
