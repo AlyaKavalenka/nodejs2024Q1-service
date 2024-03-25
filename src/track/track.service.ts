@@ -74,13 +74,6 @@ export class TrackService {
   async remove(id: string) {
     const foundTrackById = await this.findOne(id);
 
-    // TODO: after favs
-    // const foundInFavsIndex = this.db.favs.tracks.findIndex(
-    //   (trackId) => trackId === id,
-    // );
-    // if (foundInFavsIndex !== -1)
-    //   this.db.favs.tracks.splice(foundInFavsIndex, 1);
-
     await this.tracksRepository.remove(foundTrackById);
     return;
   }

@@ -54,24 +54,6 @@ export class ArtistService {
     } else {
       await this.artistsRepository.remove(foundArtistById);
 
-      // TODO: after track, favs and albums
-      // const foundInTracksIndex = this.db.tracks.findIndex(
-      //   (track) => track.artistId === id,
-      // );
-      // if (foundInTracksIndex !== -1)
-      //   this.db.tracks[foundInTracksIndex].artistId = null;
-
-      // const foundInAlbumsIndex = this.db.albums.findIndex(
-      //   (album) => album.artistId === id,
-      // );
-      // if (foundInAlbumsIndex !== -1)
-      //   this.db.albums[foundInAlbumsIndex].artistId = null;
-
-      // const foundInFavsIndex = this.db.favs.artists.findIndex(
-      //   (artistId) => artistId === id,
-      // );
-      // if (foundInFavsIndex !== -1) this.db.artists.splice(foundInFavsIndex, 1);
-
       return;
     }
   }
