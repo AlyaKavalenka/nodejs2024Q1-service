@@ -22,6 +22,14 @@ export class UserService {
     return copyObj;
   }
 
+  private refactorDateForTest(obj: User) {
+    return {
+      ...obj,
+      createdAt: obj.createdAt.getTime(),
+      updatedAt: obj.updatedAt.getTime(),
+    };
+  }
+
   async findAll() {
     return (await this.usersRepository.find()).map((user) =>
       this.excludePasswordFromResponse(user),
@@ -37,16 +45,12 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
 
-    const currDate = new Date(Date.now());
     const newUser = new User();
     newUser.login = login;
     newUser.password = password;
-    newUser.version = 1;
-    newUser.createdAt = currDate;
-    newUser.updatedAt = currDate;
 
     await this.usersRepository.save(newUser);
-    return this.excludePasswordFromResponse(newUser);
+    return this.refactorDateForTest(this.excludePasswordFromResponse(newUser));
   }
 
   async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
@@ -56,9 +60,10 @@ export class UserService {
     if (!!foundUserById) {
       if (foundUserById.password === oldPassword) {
         foundUserById.password = newPassword;
-        foundUserById.updatedAt = new Date();
         await this.usersRepository.save(foundUserById);
-        return this.excludePasswordFromResponse(foundUserById);
+        return this.refactorDateForTest(
+          this.excludePasswordFromResponse(foundUserById),
+        );
       } else {
         throw new ForbiddenException('OldPassword is wrong');
       }

@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  VersionColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -11,12 +18,12 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @VersionColumn()
   version: number; // integer number, increments on update
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date; // timestamp of creation
 
-  @Column()
+  @UpdateDateColumn()
   updatedAt: Date; // timestamp of last update
 }
