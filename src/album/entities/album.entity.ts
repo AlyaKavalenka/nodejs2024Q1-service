@@ -1,6 +1,32 @@
+import { Artist } from 'src/artist/entities/artist.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
+@Entity()
 export class Album {
-  id: string; // uuid v4
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
   name: string;
+
+  @Column()
   year: number;
-  artistId: string | null; // refers to Artist
+
+  @ManyToOne(() => Artist, {
+    eager: true,
+    onDelete: 'SET NULL',
+    nullable: true,
+    orphanedRowAction: 'nullify',
+  })
+  @JoinColumn({
+    name: 'artistId',
+    referencedColumnName: 'id',
+  })
+  artistId: Artist;
 }

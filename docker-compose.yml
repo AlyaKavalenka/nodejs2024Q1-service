@@ -1,0 +1,45 @@
+services:
+  nestapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestapp
+    restart: always
+    env_file: .env
+    environment:
+      - PORT=${PORT}
+      - DOCKER_HOST=${POSTGRES_HOSTNAME}
+    image: alyakolen/nestapp:latest
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - nestappDB
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: sync
+          path: src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json    
+  nestappDB:
+    image: postgres
+    restart: always
+    container_name: nestappDB
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    networks:
+      - app-network
+volumes:
+  pgdata: {}
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
