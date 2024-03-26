@@ -17,14 +17,39 @@ git clone {repository URL}
 npm install
 ```
 
+## Set environments
+
+Rename `.env.example` to `.env`
+
+## Migration
+
+Before generate migration file run `npm run build`. Then run `npm run migration:generate`. After run `npm run migration:run`.
+
+> I'm already create migration file, so you can just run `npm run migration:run`.
+
+> If you got error when running `npm run migration:generate` try run `npm run docker:up`.
+
+
 ## Running application
 
 ```
 npm start
 ```
+### Docker
 
+```
+npm run docker:up
+```
+#### Watch mode
+*Synchronize code in `src/` folder and containers*
+```
+npm run docker:watch
+```
+
+## Swagger
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/api/.
+
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## Testing
@@ -64,9 +89,3 @@ npm run lint
 ```
 npm run format
 ```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
